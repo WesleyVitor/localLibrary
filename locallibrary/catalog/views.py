@@ -25,17 +25,15 @@ def index(request: HttpRequest) -> HttpResponse:
 
 class BookListView(generic.ListView):
     model = Book
-    #Por padrão a variável que contém ,dentro de templates, para acessar a lista de books é
-    #book_list.
+    #Por padrão a variável que contém ,dentro de templates, para acessar a lista de books é book_list.
     context_object_name = 'my_book_list'
 
     #Por padrão o template que é gereado é book_list.html
     template_name = 'books/book_template_list.html'
 
     #Por padrão o queryset é buscar tudo, mas eu posso mudar a sua chamada
-    #queryset = Book.objects.filter(title__icontains='war')[:5]
-    def get_queryset(self):
-        return Book.objects.filter(title__icontains='war')[:5]
+    # def get_queryset(self):
+    #     return Book.objects.filter(title__icontains='war')[:5]
 
     # Mudando o contexto que será fornecido para o template gerado
     def get_context_data(self, **kwargs: Any):
@@ -43,3 +41,8 @@ class BookListView(generic.ListView):
         context =  super(BookListView, self).get_context_data(**kwargs)
         context['some_data'] = Genre.objects.all().count()
         return context
+
+class BookDetailView(generic.DetailView):
+    model = Book
+    paginate_by=2
+    template_name = 'books/book_detail.html'

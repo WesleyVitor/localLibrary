@@ -17,11 +17,16 @@ class AuthorAdmin(admin.ModelAdmin):
         ),
     )
 
+class BookInstanceInline(admin.TabularInline):
+    model = BookInstance
+    extra = 3
+
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'display_genre')
     # Chama um método de Book chamado display_genre como tem uma relação many-to-many com genre
-    
+    inlines=[BookInstanceInline]
 
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
