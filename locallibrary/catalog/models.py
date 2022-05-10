@@ -2,6 +2,8 @@ from modulefinder import LOAD_CONST
 from django.db import models
 from django.urls import reverse
 import uuid
+from django.contrib.auth.models import User
+from datetime import date
 class Genre(models.Model):
     name = models.CharField(max_length=200, help_text='Enter a book genre (e.g. Science Fiction)')
 
@@ -41,6 +43,7 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length=1, blank=True, 
     null=True, choices=LOAN_STATUS,help_text='Book availability')
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ["due_back"]
@@ -48,6 +51,11 @@ class BookInstance(models.Model):
     def __str__(self) -> str:
         return f'{self.id} ({self.book.title})'
 
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

@@ -5,6 +5,10 @@ from .models import Author, Book, BookInstance, Genre
 
 from django.views import generic
 
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+@login_required
 def index(request: HttpRequest) -> HttpResponse:
     
     num_visits = request.session.get('num_visits',0)
@@ -28,7 +32,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
     return render(request, 'index.html', context=context)
 
-class BookListView(generic.ListView):
+class BookListView(LoginRequiredMixin,generic.ListView):
     model = Book
     #Por padrão a variável que contém ,dentro de templates, para acessar a lista de books é book_list.
     context_object_name = 'my_book_list'
@@ -51,3 +55,12 @@ class BookDetailView(generic.DetailView):
     model = Book
     paginate_by=2
     template_name = 'books/book_detail.html'
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    model = BookInstance
+    template_name = 'books/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+    
