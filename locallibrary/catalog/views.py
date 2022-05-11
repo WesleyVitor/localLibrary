@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 import datetime
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 
 @login_required
@@ -77,6 +77,35 @@ class LoadnedBooksOnLoad(PermissionRequiredMixin,LoginRequiredMixin,generic.List
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    template_name = 'authors/authors_template_list.html'
+
+
+class AuthorCreate(PermissionRequiredMixin,generic.CreateView):
+    permission_required = 'can_view_all_borrowed'
+    model = Author
+    fields = '__all__'
+    success_url = reverse_lazy('authors')
+    template_name = 'authors/author_form.html'
+    initial = {'date_of_death': '05/01/2018'}
+
+class AuthorUpdate(PermissionRequiredMixin,generic.UpdateView):
+    permission_required = 'can_view_all_borrowed'
+    model = Author
+    success_url = reverse_lazy('authors')
+    template_name = 'authors/author_form.html'
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+class AuthorDelete(PermissionRequiredMixin,generic.DeleteView):
+    permission_required = 'can_view_all_borrowed'
+    model = Author
+    success_url = reverse_lazy('authors')
+    template_name = 'authors/author_confirm_delete.html'
+
+
 
 @permission_required('catalog.can_view_all_borrowed')
 def renew_book_librarian(request, pk):

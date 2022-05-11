@@ -1,0 +1,23 @@
+{% extends "base_generic.html"%} {% block title%}
+<title>Todos os Authors</title>
+{%endblock%} {% block content %}
+<h1>Book List</h1>
+{% if author_list %}
+<ul>
+  {% for author in author_list %}
+  <li>
+    {{author.first_name}} - {{author.last_name}} - 
+    {% if perms.catalog.can_view_all_borrowed%}
+    <a href="{% url 'author_update' author.pk %}">Update </a>
+    <a href="{% url 'author_delete' author.pk %}">Delete </a>
+    {%endif%}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no authors in the library.</p>
+{% endif %} 
+{% if perms.catalog.can_view_all_borrowed%}
+<a href="{% url 'author_create' %}">Create Author</a>
+{%endif%}
+{% endblock %}
