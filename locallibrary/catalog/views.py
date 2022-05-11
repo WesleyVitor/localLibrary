@@ -7,7 +7,7 @@ from django.views import generic
 
 from django.contrib.auth.decorators import login_required
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 @login_required
 def index(request: HttpRequest) -> HttpResponse:
     
@@ -56,11 +56,20 @@ class BookDetailView(generic.DetailView):
     paginate_by=2
     template_name = 'books/book_detail.html'
 
-class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+
+class LoanedBooksByUserListView(PermissionRequiredMixin,LoginRequiredMixin, generic.ListView):
     model = BookInstance
     template_name = 'books/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
+    permission_required = 'catalog.can_mark_returned'
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
     
+class LoadnedBooksOnLoad(PermissionRequiredMixin,LoginRequiredMixin,generic.ListView):
+    model = BookInstance
+    template_name = 'books/bookinstance_list_borrowed.html'
+    permission_required = 'catalog.can_view_all_borrowed'
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='o').order_by('due_back')
