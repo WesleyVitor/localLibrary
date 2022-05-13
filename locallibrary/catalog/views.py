@@ -105,6 +105,10 @@ class AuthorDelete(PermissionRequiredMixin,generic.DeleteView):
     success_url = reverse_lazy('authors')
     template_name = 'authors/author_confirm_delete.html'
 
+class AuthorDetailView(PermissionRequiredMixin, generic.DetailView):
+    permission_required = 'can_view_all_borrowed'
+    model = Author
+    template_name: str = 'authors/author_detail.html'
 
 
 @permission_required('catalog.can_view_all_borrowed')

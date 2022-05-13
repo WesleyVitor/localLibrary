@@ -10,10 +10,10 @@ class RenewBookForm(forms.Form):
 
         #Verifica se a data de renovação adicionada está no passado
         if date < datetime.date.today():
-            raise ValidationError(_('Invalid date - renewal in past'))
+            raise ValidationError('Invalid date - renewal in past')
         
         #Verifica se a data de renovação adicionada tem mais do que 3 semanas no futuro
         if date > datetime.date.today() + datetime.timedelta(weeks=4):
-            raise ValidationError(_('Invalid date - renewal more than 4 weeks ahead'))
+            raise ValidationError('Invalid date - renewal more than 4 weeks ahead')
 
         return date
