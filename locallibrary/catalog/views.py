@@ -82,7 +82,7 @@ class LoadnedBooksOnLoad(PermissionRequiredMixin,LoginRequiredMixin,generic.List
 class AuthorListView(generic.ListView):
     model = Author
     template_name = 'authors/authors_template_list.html'
-
+    paginate_by: int = 10
 
 class AuthorCreate(PermissionRequiredMixin,generic.CreateView):
     permission_required = 'can_view_all_borrowed'
