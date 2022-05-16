@@ -121,8 +121,6 @@ STATIC_URL = 'static/'
 # Redirect when login is valid
 LOGIN_REDIRECT_URL = '/'
 
-# Redirect to user not authenticated
-LOGIN_URL = '/accounts/login'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
