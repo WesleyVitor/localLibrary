@@ -111,7 +111,8 @@ class AuthorDetailView(PermissionRequiredMixin, generic.DetailView):
     template_name: str = 'authors/author_detail.html'
 
 
-@permission_required('catalog.can_view_all_borrowed')
+@permission_required('catalog.can_mark_returned')
+@login_required
 def renew_book_librarian(request, pk):
 
     book_instance = get_object_or_404(BookInstance, pk=pk)
