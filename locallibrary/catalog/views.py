@@ -73,7 +73,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 class LoadnedBooksOnLoad(PermissionRequiredMixin,LoginRequiredMixin,generic.ListView):
     model = BookInstance
     template_name = 'books/bookinstance_list_borrowed.html'
-    permission_required = 'catalog.can_view_all_borrowed'
+    permission_required = 'catalog.can_mark_returned'
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
@@ -120,11 +120,12 @@ def renew_book_librarian(request, pk):
     if request.method == 'POST':
         form = RenewBookForm(request.POST)
 
+        
         if form.is_valid():
             book_instance.due_back = form.cleaned_data['renewal_date']
             book_instance.save()
-
             return HttpResponseRedirect(reverse('borrowed'))
+        
     
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
