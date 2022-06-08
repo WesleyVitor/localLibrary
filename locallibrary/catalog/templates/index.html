@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %} {% block title%}
+{% load i18n%}
 <title>Página Principal</title>
 {%endblock%} {% block content %}
 <h1>Local Library Home</h1>
@@ -9,11 +10,11 @@
 <h2>Dynamic content</h2>
 <p>The library has the following record counts:</p>
 <ul>
-  <li><strong>Books:</strong> {{ num_books }}</li>
-  <li><strong>Copies:</strong> {{ num_instances }}</li>
-  <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
-  <li><strong>Authors:</strong> {{ num_authors }}</li>
-  <li><strong>Genres:</strong> {{ num_genre }}</li>
+  <li><strong>{% trans 'Books'%}:</strong> {{ num_books }}</li>
+  <li><strong>{% trans 'Copies'%}:</strong> {{ num_instances }}</li>
+  <li><strong>{% trans 'Copies available'%}:</strong> {{ num_instances_available }}</li>
+  <li><strong>{% trans 'Authors'%}:</strong> {{ num_authors }}</li>
+  <li><strong>{% trans 'Genres'%}:</strong> {{ num_genre }}</li>
   <li>
     <strong>Book Sumary at Tecnology Word :</strong>
 

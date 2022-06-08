@@ -1,5 +1,6 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.utils.translation import get_language
 from typing import Any
 from .models import Author, Book, BookInstance, Genre
 from .forms import RenewBookForm
@@ -31,7 +32,8 @@ def index(request: HttpRequest) -> HttpResponse:
         'num_authors':num_authors,
         'num_genre':num_genre,
         'num_book_sumary_at_tecnology_word':num_book_sumary_at_tecnology_word,
-        'num_visits':num_visits
+        'num_visits':num_visits,
+        'lang': get_language()
     }
 
     return render(request, 'index.html', context=context)
